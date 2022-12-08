@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <title>javascript</title>
+    <style>
+      * {padding:0; margin:0; box-sizing: border-box;}
+      body, html {height: 100%;}
+      .btn {background: #333; color: #fff; font-size: 14px; border-radius: 3px;}
+      .popup_wrap {width:100%; height: 100%; display: flex; align-items: center; justify-content: center; position: fixed; top:0; left:0; z-index: 99;}
+      .popupWrap {display: none;}
+      .popupWrap.open {display: flex;}
+      .popup_wrap .popup_cont {width: 400px; height: 400px; background: #fff; border: 1px solid #333; overflow: hidden; z-index: 99;}
+      .popup_wrap .in_popup_cont {width: 300px; height: 200px; background: #fff; border: 1px solid #333; overflow: hidden; z-index: 99;}
+      .popup_wrap .pop_header {width:100%; padding: 10px; border-bottom: 1px solid #333; display: flex; justify-content: space-between;}
+      .popup_wrap .pop_header .pop_tit {font-size: 14px; flex: 1;}
+      .popup_wrap .pop_cont {padding: 10px; font-size: 16px;}
+      .dim {width: 100%; height: 100%; background: rgba(0, 0, 0, 0.3); position: fixed; top:0; left:0; z-index: 98;}
+    </style>
+  </head>
+  <body>
+    <div>
+      <button class="btn" onclick="openPopup('popup1');">팝업</button>
+    </div>
+    <div class="tabArea">
+      <ul>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+    <div class="popup_wrap popupWrap" id="popup1">
+      <div class="popup_cont">
+        <div class="pop_header">
+          <p class="pop_tit">타이틀</p>
+          <button onclick="closePopup();">닫기</button>
+        </div>
+        <div class="pop_cont">
+          팝업 내용
+          <button class="btn" onclick="openPopup('popup2');">팝업2</button>
+        </div>
+      </div>
+    </div>
+    <div class="popup_wrap popupWrap" id="popup2">
+      <div class="in_popup_cont">
+        <div class="pop_header">
+          <p class="pop_tit">타이틀</p>
+          <button onclick="closePopup();">전체 팝업 닫기</button>
+          <button onclick="closeInnerPopup(this);">현재 팝업만 닫기</button>
+        </div>
+        <div class="pop_cont">
+          팝업2 내용
+        </div>
+      </div>
+    </div>
+    <script>
+      // 팝업 열기
+      function openPopup(id){
+        var popId = document.getElementById(id);
+        popId.classList.add('open');
+        // popId.children[0].outerHTML +='<div class="dim"></div>';
+        var dimUI = document.createElement('div');
+        dimUI.className = "dim";
+        popId.appendChild(dimUI);
+      }
+
+      // 전체 팝업 닫기
+      function closePopup(){
+        var popAll = document.querySelectorAll('.popupWrap');
+        document.querySelectorAll('.dim').forEach(function(v) { 
+          v.remove();
+        });
+        popAll.forEach(v => v.classList.remove("open"));
+      }
+
+      // // 현재 팝업 닫기(이중팝업 시 사용)
+      function closeInnerPopup(obj){
+        var popThis = obj;
+        var popThisWrap =  popThis.closest('.popupWrap');
+        popThisWrap.classList.remove('open');
+        // for (var i=0; i< popThisWrap.children.length; i++ ) {
+        //   if(popThisWrap.children[i].classList.contains(".dim"))  {
+        //     children[i].remove();
+        //   }
+        // }
+
+        for(var item of popThisWrap.children) {
+          if (item.classList.contains("dim")) { // hasClass('dim')
+            item.remove();
+          }
+        }
+
+      }
+
+
+      
+      // // 팝업 열기
+      // function openPopup(id){
+      //   var popId = document.getElementById(id);
+      //   popId.classList.add('open');
+      //   popId.children[0].outerHTML +='<div class="dim"></div>';
+      // }
+      
+      // // 전체 팝업 닫기
+      // function closePopup(){
+      //   var popAll = document.getElementsByClassName('popupWrap');
+      //   document.querySelectorAll('.dim').forEach(function(v) { 
+      //     v.remove();
+      //   });
+      //   for(var i = 0; i < popAll.length; i++ ){
+      //     var openObj = document.getElementsByClassName('open');
+      //     var popThisWrapAll = popAll[i];
+      //     popThisWrapAll.className = popThisWrapAll.className.replace(' open','');
+      //   }
+      // }
+
+      // // 현재 팝업 닫기(이중팝업 시 사용)
+      // function closeInnerPopup(obj){
+      //   var popThis = obj;
+      //   var popThisWrap =  popThis.closest('.popupWrap');
+      //   popThisWrap.classList.remove('open');
+      //   popThisWrap.children[1].remove();
+      // }
+      
+      // function closePopup(obj){
+      //   var popAll = document.getElementsByClassName('popupWrap');
+      //   for(var i = 0; i < popAll.length; i++ ){
+      //     var openObj = document.getElementsByClassName('open');
+      //     var thisWrap = popAll[0];
+      //     console.log(popAll);
+      //     console.log(thisWrap);
+      //     // obj.className += ' open'
+      //     if(openObj.length > 0){
+      //       thisWrap.className = thisWrap.className.replace(' open','');
+      //       document.querySelector('.dim').remove();
+      //     } else {
+      //       return false;
+      //     }
+      //   }
+      // }
+    </script>
+  </body>
+</html>
